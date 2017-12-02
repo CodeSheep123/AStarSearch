@@ -217,6 +217,7 @@ namespace AStarSearch
 			for (int x = 0; x < width; ++x)
 			{
 				visitedGScore[y][x] = false;
+				nodes[y][x].setG(10000);
 			}
 		}
 
@@ -224,9 +225,8 @@ namespace AStarSearch
 		int startY = startNode->getY();
 
 		visitedGScore[startY][startX] = true;
-		
-		/*Start the recursive G score calculation*/
-		calculateGScore(startX, startY, -1, visitedGScore);
+
+
 	}
 
 	void AStarSearch::calculateFScores()
@@ -338,8 +338,15 @@ namespace AStarSearch
 					/*Add the node to the open list*/
 					openList.push_back(*it);
 				}
-				/*If the node is already in the open list, ignore it, as we have already precalculated all 
-				  lowest G scores*/
+				else
+				{
+					float gScoreFromHere = currentNode->getG() + 1;
+					if (gScoreFromHere < (*it)->getG())
+					{
+						(*it)->setG(gScoreFromHere);
+						(*it)->setParent(currentNode);
+					}
+				}
 			}
 
 		} while (!openList.empty());
