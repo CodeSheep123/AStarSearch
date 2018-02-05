@@ -6,6 +6,7 @@
 #include <iostream> //Debug output
 #include <algorithm> //std::remove
 #include <cmath> //std::sqrt and std::pow
+#include <string> //for Exception class error msg
 #include "AStarNode.h"
 #include "AStarPath.h"
 
