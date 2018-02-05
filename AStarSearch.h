@@ -46,8 +46,17 @@ namespace AStarSearch
 		void reset();
 
 		/*@return an instance of AStarPath, which can be used to get the coordinates for every step of the path
-		  @except throws a const char* if A* search is not initialized or if there is no path*/
+		  @except throws an AstarSearch::Exception if A* search is not initialized or if there is no path*/
 		AStarPath calculatePath();
+		
+		class Exception
+		{
+		private:
+			std::string msg;
+		public:
+			explicit Exception(std::string const& error) : msg(error) {}
+			std::string what() { return msg; }
+		};
 	};
 
 	AStarSearch::AStarSearch()
@@ -232,7 +241,7 @@ namespace AStarSearch
 	void AStarSearch::calculateFScores()
 	{
 		/*Set the F score for every node to be equal to the sum of it's G and H scores.
-		  If the node is not walkable, set the score to a hight number (10000)*/
+		  If the node is not walkable, set the score to a high number (10000)*/
 		for (int y = 0; y < height; ++y)
 		{
 			for (int x = 0; x < width; ++x)
@@ -283,7 +292,7 @@ namespace AStarSearch
 	{
 		if (!wasInit)
 		{
-			throw "AStarSearch::calculatePath():  A* Search was not initialized!\n";
+			throw Exception("AStarSearch::calculatePath():  A* Search was not initialized!\n");
 		}
 		/*Create open and closed lists*/
 		std::vector<AStarNode*> openList;
@@ -354,7 +363,7 @@ namespace AStarSearch
 		/*Throw an exception if we didn't find a path*/
 		if (!foundPath)
 		{
-			throw "AStarSearch::calculatePath(): No path found!\n";
+			throw Exception("AStarSearch::calculatePath(): No path found!\n");
 		}
 
 		/*If we now go to the end node, and backtrace all parents, we get the path from the start to the end*/
